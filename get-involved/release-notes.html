@@ -1,0 +1,354 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>Release notes</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="author" content="Mahmoud Ben Hassine">
+  <meta name="description" content="Open source java rules engine">
+  <meta name="keywords" content="java, rules engine, open source">
+  <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Arizonia' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="http://www.easyrules.org/css/normalize.css" />
+  <link rel="stylesheet" href="http://www.easyrules.org/css/gridism.css" />
+  <link rel="stylesheet" href="http://www.easyrules.org/css/style.css" />
+  <link rel="stylesheet" href="http://www.easyrules.org/css/pygments.css" />
+  <link rel="icon" type="image/x-icon" href="http://www.easyrules.org/favicon.ico" />
+  <script src="http://www.easyrules.org/js/modernizr-2.5.3.min.js"></script>
+</head>
+
+
+<body class="wrap">
+
+  <header>
+  <div class="grid">
+    <div class="unit one-third">
+      <a href="http://www.easyrules.org/index.html">
+        <h1>
+          <span class="shadow">Easy Rules</span>
+        </h1>
+      </a>
+    </div>
+    <nav class="main-nav unit two-thirds">
+      <ul>
+<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+  <li class="">
+    <a href="http://www.easyrules.org/index.html">Home</a>
+  </li>
+  <li class="current">
+    <a href="http://www.easyrules.org/about/overview.html">Documentation</a>
+  </li>
+    <li>
+        <a target="_blank" href="http://www.easyrules.org/api/">API docs</a>
+    </li>
+  <li>
+    <a target="_blank" href="https://github.com/EasyRules/easyrules">View on GitHub</a>
+  </li>
+</ul>
+
+    </nav>
+  </div>
+</header>
+
+
+    <section class="news">
+    <div class="grid">
+
+      <div class="unit four-fifths">
+        <article>
+    <h2>
+        <a href="/get-involved/release-notes.html">Release notes</a>
+    </h2>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 2.2.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2015-12-07</span>
+        </div>
+        <div class="post-content">
+            <p>This release adds the following features:</p>
+            <ul>
+                <li>New method <code>getRules()</code> in the <code>RulesEngine</code> API to get registered rules in a rules engine
+                    (<a href="https://github.com/EasyRules/easyrules/issues/22" target="_blank">Issue #22</a>).</li>
+                <li>New method <code>getParameters()</code> in the <code>RulesEngine</code> API to get engine parameters
+                    encapsulated in the <code>RulesEngineParameters</code> class
+                    (<a href="https://github.com/EasyRules/easyrules/issues/28" target="_blank">Issue #28</a>).</li>
+                <li>New <code>@SpringRule</code> that turns a POJO into a Spring prototype-scoped rule bean
+                    (<a href="https://github.com/EasyRules/easyrules/issues/29" target="_blank">Issue #29</a>).</li>
+                <li>Support for meta-annotations: You can now define your own annotation which itself is annotated with <code>@Rule</code>
+                    (<a href="https://github.com/EasyRules/easyrules/pull/26" target="_blank">PR #26</a>).</li>
+                <li>The default rule name is now equal to the class name (<a href="https://github.com/EasyRules/easyrules/issues/24" target="_blank">Issue #24</a>).</li>
+                <li>The default rule description is now equal to <code>when[ConditionMethod]then[ActionMethods]</code> (<a href="https://github.com/EasyRules/easyrules/issues/24" target="_blank">Issue #24</a>).</li>
+            </ul>
+            <p>This version also added many improvements, bug fixes and documentation updates.</p>
+        </div>
+    </div>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 2.1.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2015-06-28</span>
+        </div>
+        <div class="post-content">
+            <p>This release brings the following new features:</p>
+            <ul>
+                <li>New APIs to embed easy rules in a <a href="http://www.spring.io" target="_blank">Spring</a> container.</li>
+                <li>New APIs to schedule a rules engine using <a href="http://www.quartz-scheduler.org" target="_blank">Quartz</a> (<a href="https://github.com/EasyRules/easyrules/pull/15" target="_blank">PR #15</a>).</li>
+                <li>New maven archetype to create a quick start project.
+            </ul>
+            <p>This version also added new tutorials and many improvements and bug fixes.</p>
+        </div>
+    </div>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 2.0.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2015-05-21</span>
+        </div>
+        <div class="post-content">
+            <p>This is a major release of Easy Rules with some API breaking changes.</p>
+            <p>The most important change is the merge of <code>DefaultRulesEngine</code> and <code>AnnotatedRulesEngine</code>.
+                With version 1.x, rules that implement the <code>Rule</code> interface and rules that are annotated POJOs required to be used with different engines.
+                Version 2.0 removes this constraint and all types of rules can now be used in a consistent way through the single and unified <code>RulesEngine</code> interface.</p>
+            <p>This version also brings a lot of new features and improvements:</p>
+            <ul>
+                <li>Added a new <code>RulesEngineBuilder</code> as the main entry point to create rules engines</li>
+                <li>Added a new <code>RuleListener</code> to be able to add custom behavior before/after the execution of each rule (<a href="https://github.com/EasyRules/easyrules/issues/11" target="_blank">Issue #11</a>)</li>
+                <li>Added a new parameter <code>skipOnFirstFailedRule</code> to skip next rules when a rule fails (<a href="https://github.com/EasyRules/easyrules/issues/10" target="_blank">Issue #10</a>).</li>
+                <li>Added a new parameter <code>silentMode</code> to mute all loggers</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 1.3.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2015-03-11</span>
+        </div>
+        <div class="post-content">
+            <p>This release added the following features:</p><p></p>
+            <ul>
+                <li>Moved JMX support to a separate module so that the core engine can be used in both Java and Android applications (<a href="https://github.com/EasyRules/easyrules/pull/5" target="_blank">PR #5</a>).</li>
+                <li>Fixed <a href="https://github.com/EasyRules/easyrules/issues/6" target="_blank">issue #6</a>: Can't register multiple rules with the same priority to DefaultRulesEngine</li>
+                <li>Refactored tests to use <a href="http://mockito.org/" target="_blank">Mockito</a> and <a href="http://assertj.org" target="_blank">AssertJ</a></li>
+                <li>Improved test coverage</li>
+                <li>Updated documentation and tutorials</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 1.2.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2014-10-15</span>
+        </div>
+        <div class="post-content">
+            <p>This release brings the following improvements:</p><p></p>
+            <ul>
+                <li>Added a method in <code>RulesEngine</code> interface to unregister a rule.</li>
+                <li>Added a <a href="http://www.easyrules.org/tutorials/rule-priority.html">tutorial</a> with a showcase of rules priorities.</li>
+                <li>Improved code quality by fixing several sonar errors/warnings</li>
+            </ul>
+        </div>
+    </div>
+
+    <p></p>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 1.1.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2014-10-02</span>
+        </div>
+        <div class="post-content">
+            <p>This release introduced a big refactoring of Easy Rules APIs to provide the following features:</p><p></p>
+            <ul>
+                <li>Added annotation support to provide a POJO based development model</li>
+                <li>Added new site for documentation and tutorials</li>
+                <li>Added new set of tutorials for basic and advanced usage of Easy Rules APIs </li>
+                <li>Renamed base package from <code>io.github.benas</code> to <code>org.easyrules</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <p></p>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 1.0.1</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2014-01-24</span>
+        </div>
+        <div class="post-content">
+            <p>This minor release fixed the base package name.</p>
+        </div>
+    </div>
+
+    <p></p>
+
+    <div class="release">
+        <span class="post-category">
+            <span class="label">Version 1.0.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2013-12-23</span>
+        </div>
+        <div class="post-content">
+            <p>This is the first stable version of Easy Rules. It contains initial core API and implementation:</p>
+            <ul>
+                <li>Basic abstractions for rules and rules engine</li>
+                <li>Ability to create composite rules from primitive ones</li>
+                <li>Ability to manage rules at runtime via JMX</li>
+                <li>Java fluent API to create rules engine</li>
+            </ul>
+        </div>
+    </div>
+</article>
+
+        <div class="section-nav">
+  <div class="left align-right">
+    
+      <a href="http://www.easyrules.org/tutorials/spring-tutorial.html" class="prev">
+        Back
+      </a>
+    
+  </div>
+  <div class="right align-left">
+    
+      <a href="http://www.easyrules.org/get-involved/faq.html" class="next">
+        Next
+      </a>
+    
+  </div>
+  <div class="clear"></div>
+</div>
+
+
+      </div>
+
+        <div class="unit one-fifth">
+  <aside>
+
+    <h4>About Easy Rules</h4>
+    <ul>
+      <li class="">
+        <a href="http://www.easyrules.org/about/overview.html">Overview</a>
+      </li>
+      <li class="">
+        <a href="http://www.easyrules.org/about/getting-started.html">Getting started</a>
+      </li>
+    </ul>
+
+    <h4>User guide</h4>
+      <ul>
+          <li class="">
+            <a href="http://www.easyrules.org/user-guide/introduction.html">Introduction</a>
+          </li>
+          <li class="">
+            <a href="http://www.easyrules.org/user-guide/defining-rules.html">Defining rules</a>
+          </li>
+          <li class="">
+          <a href="http://www.easyrules.org/user-guide/rule-listener.html">Rule listener</a>
+          </li>
+          <li class="">
+            <a href="http://www.easyrules.org/user-guide/rules-engine.html">Rules engine</a>
+          </li>
+          <li class="">
+            <a href="http://www.easyrules.org/user-guide/managing-rules.html">Managing rules</a>
+          </li>
+          <li class="">
+          <a href="http://www.easyrules.org/user-guide/scheduling-rules-engine.html">Scheduling a rules engine</a>
+          </li>
+          <li class="">
+          <a href="http://www.easyrules.org/user-guide/embedding-rules-engine.html">Embedding a rules engine</a>
+          </li>
+      </ul>
+
+      <h4>Tutorials</h4>
+      <ul>
+          <li class="">
+            <a href="http://www.easyrules.org/tutorials/hello-world-tutorial.html">Hello world tutorial</a>
+          </li>
+          <li class="">
+          <a href="http://www.easyrules.org/tutorials/shop-tutorial.html">Shop tutorial</a>
+          </li>
+          <li class="">
+          <a href="http://www.easyrules.org/tutorials/scheduler-tutorial.html">Scheduler tutorial</a>
+          </li>
+          <li class="">
+          <a href="http://www.easyrules.org/tutorials/spring-tutorial.html">Spring tutorial</a>
+          </li>
+      </ul>
+
+
+
+    <h4>Get involved</h4>
+    <ul>
+        <li class="current">
+            <a href="http://www.easyrules.org/get-involved/release-notes.html">Release notes</a>
+        </li>
+        <li class="">
+        <a href="http://www.easyrules.org/get-involved/faq.html">FAQs</a>
+        </li>
+        <li>
+            <a target="_blank" href="https://github.com/EasyRules/easyrules">Source repository</a>
+        </li>
+        <li>
+            <a target="_blank" href="https://github.com/EasyRules/easyrules/issues">Issue tracker</a>
+        </li>
+    </ul>
+
+  </aside>
+</div>
+
+      <div class="clear"></div>
+
+    </div>
+  </section>
+
+
+  <footer>
+  <div class="grid">
+    <div class="unit one-third center-on-mobiles">
+      <p>Project created and maintained by <a target="_blank" href="http://benas.github.io">Mahmoud Ben Hassine</a>
+          and the <a href="https://github.com/EasyRules/easyrules#awesome-contributors" target="_blank">awesome contributors</a>.</p>
+    </div>
+    <div class="unit two-thirds align-right center-on-mobiles">
+      <p>Easy Rules is released under the terms of the <a href="http://opensource.org/licenses/mit-license.php/" target="_blank">MIT license</a>.<br/>
+          This website is inspired by and built with <a target="_blank" href="http://jekyllrb.com">Jekyll</a>.
+      </p>
+
+    </div>
+  </div>
+</footer>
+
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46301888-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</body>
+
+</html>
+
