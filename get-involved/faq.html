@@ -195,7 +195,7 @@ Person Tom has been marked as adult.
 <p>Sure. Easy Rules is very lightweight and can be used both in a standalone application or embedded in an application server,
 a servlet container or a dependency injection container.</p>
 
-<h2 id="6-how-to-deal-with-tread-safety"><a name="6"></a><a href="#6">6. How to deal with tread safety?</a></h2>
+<h2 id="6-how-to-deal-with-thread-safety"><a name="6"></a><a href="#6">6. How to deal with thread safety?</a></h2>
 
 <p>If you run Easy Rules in a multi-threaded environment, you should take into account the following considerations:</p>
 
@@ -204,7 +204,7 @@ a servlet container or a dependency injection container.</p>
 <li>By design, rules in Easy Rules encapsulate the business object model they operate on, so they are <strong>not</strong> thread safe neither.</li>
 </ul>
 
-<p>Do not try to make everything synchronized or locked down! Easy Rules engine is very a lightweight object 
+<p>Do not try to make everything synchronized or locked down! Easy Rules engine is a very lightweight object 
 and you can create an instance per thread, this is by far the easiest way to avoid thread safety problems.
 And if, at this exact point of time reading this line, you are already thinking about performance,
 don&#39;t forget that <a href="http://c2.com/cgi/wiki?PrematureOptimization" target="_blank"><em>&quot;Premature optimization is the root of all evil&quot; - Donald Knuth</em></a>. </p>
