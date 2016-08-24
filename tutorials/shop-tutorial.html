@@ -62,231 +62,255 @@
 The minimal legal age to be considered as adult is 18. This tutorial is split in two parts:</p>
 
 <ol>
-<li>Part 1: Implement the business rule of denying children from buying alcohol</li>
-<li>Part 2: Make the legal age configurable via JMX so we can change it at runtime</li>
+  <li>Part 1: Implement the business rule of denying children from buying alcohol</li>
+  <li>Part 2: Make the legal age configurable via JMX so we can change it at runtime</li>
 </ol>
 
-<h2 id="part-1-implement-the-business-rule">Part 1 : Implement the business rule</h2>
+<h2 id="part-1--implement-the-business-rule">Part 1 : Implement the business rule</h2>
 
 <p>Our shop customers are represented by the <em>Person</em> class:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
     <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
     <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">adult</span><span class="o">;</span>
     <span class="c1">//getters and setters omitted</span>
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>We will define the following rules:</p>
 
 <ul>
-<li>Rule 1: should operate an a <code>Person</code> instance, check that the person age is greater than 18 and set the adult flag.</li>
-<li>Rule 2: should operate an a <code>Person</code> instance, check that the person is adult and deny children (ie, non adult) from buying alcohol.</li>
+  <li>Rule 1: should operate an a <code class="highlighter-rouge">Person</code> instance, check that the person age is greater than 18 and set the adult flag.</li>
+  <li>Rule 2: should operate an a <code class="highlighter-rouge">Person</code> instance, check that the person is adult and deny children (ie, non adult) from buying alcohol.</li>
 </ul>
 
 <p>Rule 1 should be fired <strong><em>before</em></strong> rule 2. We will set rule 1 priority to 1 and rule 2 priority to 2 so that Easy Rules engine fire them in this order.</p>
 
-<p>First, let&#39;s create a class for rule 1:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AgeRule</span> <span class="kd">extends</span> <span class="n">BasicRule</span> <span class="o">{</span>
+<p>First, let’s create a class for rule 1:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AgeRule</span> <span class="kd">extends</span> <span class="n">BasicRule</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">ADULT_AGE</span> <span class="o">=</span> <span class="mi">18</span><span class="o">;</span>
 
     <span class="kd">private</span> <span class="n">Person</span> <span class="n">person</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="nf">AgeRule</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="s">&quot;AgeRule&quot;</span><span class="o">,</span>
-              <span class="s">&quot;Check if person&#39;s age is &gt; 18 and</span>
-<span class="s">               marks the person as adult&quot;</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">AgeRule</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="s">"AgeRule"</span><span class="o">,</span>
+              <span class="s">"Check if person's age is &gt; 18 and
+               marks the person as adult"</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">evaluate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">evaluate</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">person</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">ADULT_AGE</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">execute</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">person</span><span class="o">.</span><span class="na">setAdult</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;Person %s has been marked as adult&quot;</span><span class="o">,</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Person %s has been marked as adult"</span><span class="o">,</span>
                             <span class="n">person</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
-
+    
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>As required, this rule class operates on a person that is passed at construction time.</p>
 
-<p>The <code>evaluate</code> method checks if the person&#39;s age is greater than 18.</p>
+<p>The <code class="highlighter-rouge">evaluate</code> method checks if the person’s age is greater than 18.</p>
 
-<p>The <code>execute</code> will mark the person as adult by setting the <code>adult</code> flag.</p>
+<p>The <code class="highlighter-rouge">execute</code> will mark the person as adult by setting the <code class="highlighter-rouge">adult</code> flag.</p>
 
 <p>Finally, the third constructor argument which represents the rule priority is set to 1 to tells Easy Rules engine to fire this rule in first order.</p>
 
-<p>Now, let&#39;s create a class for rule 2:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AlcoholRule</span> <span class="kd">extends</span> <span class="n">BasicRule</span> <span class="o">{</span>
+<p>Now, let’s create a class for rule 2:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AlcoholRule</span> <span class="kd">extends</span> <span class="n">BasicRule</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">Person</span> <span class="n">person</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="nf">AlcoholRule</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="s">&quot;AlcoholRule&quot;</span><span class="o">,</span> 
-              <span class="s">&quot;Children are not allowed to buy alcohol&quot;</span><span class="o">,</span>
+    <span class="kd">public</span> <span class="n">AlcoholRule</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="s">"AlcoholRule"</span><span class="o">,</span> 
+              <span class="s">"Children are not allowed to buy alcohol"</span><span class="o">,</span>
                <span class="mi">2</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Condition</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">evaluate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">evaluate</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="o">!</span><span class="n">person</span><span class="o">.</span><span class="na">isAdult</span><span class="o">();</span>
     <span class="o">}</span>
 
     <span class="nd">@Action</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;Shop: Sorry %s,</span>
-<span class="s">                you are not allowed to buy alcohol&quot;</span><span class="o">,</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">execute</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Shop: Sorry %s,
+                you are not allowed to buy alcohol"</span><span class="o">,</span>
                  <span class="n">person</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
 
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>As for rule 1, the class operates on a person instance and prints the denial message for children.</p>
 
 <p>To launch the tutorial, we will use the following class:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">//create a person instance</span>
-        <span class="n">Person</span> <span class="n">tom</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Person</span><span class="o">(</span><span class="s">&quot;Tom&quot;</span><span class="o">,</span> <span class="mi">14</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Tom:</span>
-<span class="s">                Hi! can I have some Vodka please?&quot;</span><span class="o">);</span>
+        <span class="n">Person</span> <span class="n">tom</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="s">"Tom"</span><span class="o">,</span> <span class="mi">14</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Tom:
+                Hi! can I have some Vodka please?"</span><span class="o">);</span>
 
         <span class="c1">//create a rules engine</span>
         <span class="n">RulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">aNewRulesEngine</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">named</span><span class="o">(</span><span class="s">&quot;shop rules engine&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">named</span><span class="o">(</span><span class="s">"shop rules engine"</span><span class="o">)</span>
                 <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
         <span class="c1">//register rules</span>
-        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="k">new</span> <span class="nf">AgeRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
-        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="k">new</span> <span class="nf">AlcoholRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
+        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="k">new</span> <span class="n">AgeRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
+        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="k">new</span> <span class="n">AlcoholRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
 
         <span class="c1">//fire rules</span>
         <span class="n">rulesEngine</span><span class="o">.</span><span class="na">fireRules</span><span class="o">();</span>
     <span class="o">}</span>
 
 <span class="o">}</span>
-</code></pre></div>
-<p>To run the first part of the tutorial, you can follow these instructions from the root directory of Easy Rules :</p>
+</code></pre>
+</div>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn install
-<span class="nv">$ </span><span class="nb">cd </span>easyrules-samples
-<span class="nv">$ </span>mvn <span class="nb">exec</span>:java -P runShopTutorialPart1</code></pre></figure>
+<p>To run the first part of the tutorial, please follow these instructions:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>git clone https://github.com/EasyRules/easyrules-tutorials.git
+<span class="gp">$ </span><span class="nb">cd </span>easyrules-tutorials
+<span class="gp">$ </span>mvn install <span class="nb">exec</span>:java -P runShopTutorialPart1</code></pre></figure>
 
 <p>You should get the following output:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Tom: Hi! can I have some Vodka please?
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Tom: Hi! can I have some Vodka please?
 INFO: Rule alcoholRule triggered.
 Shop: Sorry Tom, you are not allowed to buy alcohol
 INFO: Rule alcoholRule performed successfully.
-</code></pre></div>
-<p>As expected, since Tom&#39;s age is under 18, he has not been allowed to buy alcohol.</p>
+</code></pre>
+</div>
 
-<h2 id="part-2-changing-the-legal-adult-age-at-runtime">Part 2 : Changing the legal adult age at runtime</h2>
+<p>As expected, since Tom’s age is under 18, he has not been allowed to buy alcohol.</p>
+
+<h2 id="part-2--changing-the-legal-adult-age-at-runtime">Part 2 : Changing the legal adult age at runtime</h2>
 
 <p>In this second part, we will expose the legal adult age as a JMX attribute. 
-So first, let&#39;s define an interface that allows us to change this age via JMX:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@javax.management.MXBean</span>
+So first, let’s define an interface that allows us to change this age via JMX:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">MXBean</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AgeJmxRule</span> <span class="kd">extends</span> <span class="n">JmxRule</span> <span class="o">{</span>
-
-    <span class="kt">int</span> <span class="nf">getAdultAge</span><span class="o">();</span>
-
-    <span class="kt">void</span> <span class="nf">setAdultAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">adultAge</span><span class="o">);</span>
+    
+    <span class="kt">int</span> <span class="n">getAdultAge</span><span class="o">();</span>
+    
+    <span class="kt">void</span> <span class="n">setAdultAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">adultAge</span><span class="o">);</span>
 
 <span class="o">}</span>
-</code></pre></div>
-<p>Then, we should make our <code>AgeRule</code> implement the <code>AgeJmxRule</code> interface to expose the the legal adult age as a JMX attribute.
-So here is the new <code>AgeRule</code> class:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AgeRule</span> <span class="kd">extends</span> <span class="n">BasicRule</span> <span class="kd">implements</span> <span class="n">AgeJmxRule</span> <span class="o">{</span>
+</code></pre>
+</div>
+
+<p>Then, we should make our <code class="highlighter-rouge">AgeRule</code> implement the <code class="highlighter-rouge">AgeJmxRule</code> interface to expose the the legal adult age as a JMX attribute.
+So here is the new <code class="highlighter-rouge">AgeRule</code> class:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AgeRule</span> <span class="kd">extends</span> <span class="n">BasicRule</span> <span class="kd">implements</span> <span class="n">AgeJmxRule</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kt">int</span> <span class="n">adultAge</span> <span class="o">=</span> <span class="mi">18</span><span class="o">;</span>
 
     <span class="kd">private</span> <span class="n">Person</span> <span class="n">person</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="nf">AgeRule</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="s">&quot;AgeRule&quot;</span><span class="o">,</span> 
-              <span class="s">&quot;Check if person&#39;s age is &gt; 18 </span>
-<span class="s">               and marks the person as adult&quot;</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">AgeRule</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="s">"AgeRule"</span><span class="o">,</span> 
+              <span class="s">"Check if person's age is &gt; 18 
+               and marks the person as adult"</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">evaluate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">evaluate</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">person</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">adultAge</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">execute</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">person</span><span class="o">.</span><span class="na">setAdult</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;Person %s has been marked as adult&quot;</span><span class="o">,</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Person %s has been marked as adult"</span><span class="o">,</span>
                 <span class="n">person</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
-
+    
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAdultAge</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="n">getAdultAge</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">adultAge</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAdultAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">adultAge</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setAdultAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">adultAge</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">adultAge</span> <span class="o">=</span> <span class="n">adultAge</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>Finally, let&#39;s suspend the program to change the legal adult age value at runtime via any compliant JMX client and see the engine behavior after this change:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
+</code></pre>
+</div>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<p>Finally, let’s suspend the program to change the legal adult age value at runtime via any compliant JMX client and see the engine behavior after this change:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="c1">//create a person instance</span>
-        <span class="n">Person</span> <span class="n">tom</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Person</span><span class="o">(</span><span class="s">&quot;Tom&quot;</span><span class="o">,</span> <span class="mi">14</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Tom: </span>
-<span class="s">                    Hi! can I have some Vodka please?&quot;</span><span class="o">);</span>
+        <span class="n">Person</span> <span class="n">tom</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="s">"Tom"</span><span class="o">,</span> <span class="mi">14</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Tom: 
+                    Hi! can I have some Vodka please?"</span><span class="o">);</span>
 
         <span class="c1">//create a Jmx rules engine</span>
         <span class="n">JmxRulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">aNewJmxRulesEngine</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">named</span><span class="o">(</span><span class="s">&quot;shop rules engine&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">named</span><span class="o">(</span><span class="s">"shop rules engine"</span><span class="o">)</span>
                 <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
         <span class="c1">//register rules</span>
-        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerJmxRule</span><span class="o">(</span><span class="k">new</span> <span class="nf">AgeRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
-        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="k">new</span> <span class="nf">AlcoholRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
+        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerJmxRule</span><span class="o">(</span><span class="k">new</span> <span class="n">AgeRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
+        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="k">new</span> <span class="n">AlcoholRule</span><span class="o">(</span><span class="n">tom</span><span class="o">));</span>
 
         <span class="c1">//fire rules</span>
         <span class="n">rulesEngine</span><span class="o">.</span><span class="na">fireRules</span><span class="o">();</span>
 
         <span class="c1">// Update adult age via a JMX client.</span>
-        <span class="n">Scanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Scanner</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">in</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Change adult age via a JMX client </span>
-<span class="s">                            and then press enter&quot;</span><span class="o">);</span>
+        <span class="n">Scanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">in</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Change adult age via a JMX client 
+                            and then press enter"</span><span class="o">);</span>
         <span class="n">scanner</span><span class="o">.</span><span class="na">nextLine</span><span class="o">();</span>
 
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Re fire rules after</span>
-<span class="s">                            updating adult age...&quot;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Re fire rules after
+                            updating adult age..."</span><span class="o">);</span>
 
         <span class="n">rulesEngine</span><span class="o">.</span><span class="na">fireRules</span><span class="o">();</span>
     <span class="o">}</span>
 
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>To run the second part of the tutorial, run the following command:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn <span class="nb">exec</span>:java -P runShopTutorialPart2</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>mvn <span class="nb">exec</span>:java -P runShopTutorialPart2</code></pre></figure>
 
 <p>You will be asked to change the legal adult age via a JMX compliant client.</p>
 
 <p>In the next screenshot, we use <a href="https://visualvm.java.net" target="_blank">VisualVM</a> to change the age value:</p>
 
-<p><img style="width: 100%" src="http://www.easyrules.org/img/jmx.png"></p>
+<p><img style="width: 100%" src="http://www.easyrules.org/img/jmx.png" /></p>
 
 <p>If you change the age value to 13 for example, you will see that Tom will be able to buy alcohol since his age (14) is greater than the new legal adult age (13).</p>
 
-<p>That&#39;s all! In this tutorial, we have seen how to create a real business rule with Easy Rules and how to reconfigure it at runtime.</p>
+<p>That’s all! In this tutorial, we have seen how to create a real business rule with Easy Rules and how to reconfigure it at runtime.</p>
 
           <div class="section-nav">
   <div class="left align-right">

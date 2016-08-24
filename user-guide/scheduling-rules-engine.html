@@ -61,34 +61,43 @@
           <p>Easy Rules provides APIs to schedule a rules engine using the popular Java scheduler <a href="http://www.quartz-scheduler.org" target="_blank">Quartz</a>.</p>
 
 <p>To schedule a rules engine instance, first you need to add the following dependency to your <strong><em>pom.xml</em></strong>:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.easyrules<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>easyrules-quartz<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.2.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.3.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre></div>
-<p>Then, you can create a <code>RulesEngineScheduler</code> as follows:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">RulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">aNewRulesEngine</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+</code></pre>
+</div>
 
-<span class="n">Date</span> <span class="n">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Date</span><span class="o">();</span>
+<p>Then, you can create a <code class="highlighter-rouge">RulesEngineScheduler</code> as follows:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">RulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">aNewRulesEngine</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+
+<span class="n">Date</span> <span class="n">now</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">();</span>
 <span class="kt">int</span> <span class="n">everySecond</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
 
 <span class="n">RulesEngineScheduler</span> <span class="n">scheduler</span> <span class="o">=</span> <span class="n">RulesEngineScheduler</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
 <span class="n">scheduler</span><span class="o">.</span><span class="na">scheduleAtWithInterval</span><span class="o">(</span><span class="n">rulesEngine</span><span class="o">,</span> <span class="n">now</span><span class="o">,</span> <span class="n">everySecond</span><span class="o">);</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>This will schedule the rules engine to start now and repeat every second.</p>
 
-<p>The <code>RulesEngineScheduler</code> API provides methods to schedule a rules engine:</p>
+<p>The <code class="highlighter-rouge">RulesEngineScheduler</code> API provides methods to schedule a rules engine:</p>
 
 <ul>
-<li>At a fixed point of time using <code>scheduleAt(RulesEngine engine, Date when)</code></li>
-<li>Repeatedly with a predefined interval using <code>scheduleAtWithInterval(RulesEngine engine, Date when, int interval)</code></li>
-<li>Using unix cron-like expression with <code>scheduleCron(RulesEngine engine, String cronExpression)</code></li>
+  <li>At a fixed point of time using <code class="highlighter-rouge">scheduleAt(RulesEngine engine, Date when)</code></li>
+  <li>Repeatedly with a predefined interval using <code class="highlighter-rouge">scheduleAtWithInterval(RulesEngine engine, Date when, int interval)</code></li>
+  <li>Using unix cron-like expression with <code class="highlighter-rouge">scheduleCron(RulesEngine engine, String cronExpression)</code></li>
 </ul>
 
 <p>To unregister a rules engine, use the following snippet:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">scheduler</span><span class="o">.</span><span class="na">unschedule</span><span class="o">(</span><span class="n">rulesEngine</span><span class="o">);</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">scheduler</span><span class="o">.</span><span class="na">unschedule</span><span class="o">(</span><span class="n">rulesEngine</span><span class="o">);</span>
+</code></pre>
+</div>
+
 <p>You can find a tutorial about scheduling rules engine in the <a href="http://www.easyrules.org/tutorials/scheduler-tutorial.html">Scheduler tutorial</a>.</p>
 
           <div class="section-nav">

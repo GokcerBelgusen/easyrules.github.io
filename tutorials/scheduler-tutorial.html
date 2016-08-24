@@ -58,47 +58,51 @@
       <div class="unit four-fifths">
         <article>
           <h1>Scheduler tutorial</h1>
-          <p>This tutorial shows how to schedule a rules engine using the <code>RulesEngineScheduler</code> API.</p>
+          <p>This tutorial shows how to schedule a rules engine using the <code class="highlighter-rouge">RulesEngineScheduler</code> API.</p>
 
-<p>We would like to print the current time only if the seconds value is even. So let&#39;s get started. </p>
+<p>We would like to print the current time only if the seconds value is even. So let’s get started.</p>
 
 <p>First, we will create a rule that checks the current time and print it to the console if seconds are even:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Rule</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;time rule&quot;</span><span class="o">,</span> 
-      <span class="n">description</span> <span class="o">=</span> <span class="s">&quot;Print the current time </span>
-<span class="s">                     only if seconds are even&quot;</span><span class="o">)</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Rule</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"time rule"</span><span class="o">,</span> 
+      <span class="n">description</span> <span class="o">=</span> <span class="s">"Print the current time 
+                     only if seconds are even"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TimeRule</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">Date</span> <span class="n">now</span><span class="o">;</span>
 
     <span class="nd">@Condition</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">checkTime</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Date</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">checkTime</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">();</span>
         <span class="k">return</span> <span class="n">now</span><span class="o">.</span><span class="na">getSeconds</span><span class="o">()</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Action</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printTime</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Seconds in &quot;</span> <span class="o">+</span> <span class="n">now</span> <span class="o">+</span> <span class="s">&quot; are even&quot;</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">printTime</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Seconds in "</span> <span class="o">+</span> <span class="n">now</span> <span class="o">+</span> <span class="s">" are even"</span><span class="o">);</span>
     <span class="o">}</span>
 
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>Then, we have to register an instance of this rule in a Easy Rules engine and schedule the engine:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Date</span> <span class="n">NOW</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Date</span><span class="o">();</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
 
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Date</span> <span class="n">NOW</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">();</span>
+    
     <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">EVERY_SECOND</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
 
         <span class="n">RulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">RulesEngineBuilder</span>
                 <span class="o">.</span><span class="na">aNewRulesEngine</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">named</span><span class="o">(</span><span class="s">&quot;time rules engine&quot;</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">named</span><span class="o">(</span><span class="s">"time rules engine"</span><span class="o">)</span>
                 <span class="o">.</span><span class="na">withSilentMode</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
                 <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
-        <span class="n">TimeRule</span> <span class="n">timeRule</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TimeRule</span><span class="o">();</span>
+        <span class="n">TimeRule</span> <span class="n">timeRule</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TimeRule</span><span class="o">();</span>
         <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="n">timeRule</span><span class="o">);</span>
 
         <span class="n">RulesEngineScheduler</span> <span class="n">scheduler</span> <span class="o">=</span> 
@@ -108,28 +112,34 @@
                                          <span class="n">EVERY_SECOND</span><span class="o">);</span>
         <span class="n">scheduler</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
 
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Hit &#39;enter&#39; to stop the application&quot;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hit 'enter' to stop the application"</span><span class="o">);</span>
         <span class="n">System</span><span class="o">.</span><span class="na">in</span><span class="o">.</span><span class="na">read</span><span class="o">();</span>
         <span class="n">scheduler</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>That&#39;s it! The <code>TimeRule</code> will be triggered every second and will print the current time only if seconds value is even.</p>
+</code></pre>
+</div>
 
-<p>To run this tutorial, you can follow these instructions from the root directory of Easy Rules :</p>
+<p>That’s it! The <code class="highlighter-rouge">TimeRule</code> will be triggered every second and will print the current time only if seconds value is even.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn install
-<span class="nv">$ </span><span class="nb">cd </span>easyrules-samples
-<span class="nv">$ </span>mvn <span class="nb">exec</span>:java -P runSchedulerTutorial</code></pre></figure>
+<p>To run this tutorial, you can follow these instructions:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>git clone https://github.com/EasyRules/easyrules-tutorials.git
+<span class="gp">$ </span><span class="nb">cd </span>easyrules-tutorials
+<span class="gp">$ </span>mvn install <span class="nb">exec</span>:java -P runSchedulerTutorial</code></pre></figure>
 
 <p>You should see in the console something like:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Hit enter to stop the application
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Hit enter to stop the application
 Seconds in Tue Jun 23 12:57:32 CEST 2015 are even
 Seconds in Tue Jun 23 12:57:34 CEST 2015 are even
 Seconds in Tue Jun 23 12:57:36 CEST 2015 are even
 Seconds in Tue Jun 23 12:57:38 CEST 2015 are even
 [Enter]
-</code></pre></div>
+</code></pre>
+</div>
+
+
           <div class="section-nav">
   <div class="left align-right">
     

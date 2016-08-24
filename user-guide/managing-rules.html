@@ -58,33 +58,43 @@
       <div class="unit four-fifths">
         <article>
           <h1>Managing rules at runtime</h1>
-          <p>Being able to dynamically reconfigure business rules at runtime in production systems is a recurrent requirement.</p>
+          <div class="note warning">
+  <h5>Deprecated feature</h5>
+  <p>JMX managed rules have been deprecated in version 2.3.0 and will be removed in next release.
+   Please check the <a href="http://www.easyrules.org/get-involved/release-notes.html">change log</a> for more details about this deprecation.</p>
+</div>
 
 <p>Thanks to JMX, Easy Rules can expose rules attributes to be managed via any JMX compliant client.</p>
 
 <p>First, you need to add the following dependency to your <strong><em>pom.xml</em></strong>:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependencies&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependencies&gt;</span>
     <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>org.easyrules<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>easyrules-jmx<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>2.2.0<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;version&gt;</span>2.3.0<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;/dependencies&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>To make your rule manageable via JMX, it should:</p>
 
 <ul>
-<li>implement the <code>JmxRule</code> interface or extend the <code>BasicJmxRule</code> class </li>
-<li>or be annotated with <code>javax.management.MXBean</code> if it is a annotated POJO</li>
+  <li>implement the <code class="highlighter-rouge">JmxRule</code> interface or extend the <code class="highlighter-rouge">BasicJmxRule</code> class</li>
+  <li>or be annotated with <code class="highlighter-rouge">javax.management.MXBean</code> if it is a annotated POJO</li>
 </ul>
 
-<p>Once you defined your rule as a Jmx compliant object, you can register it in a <code>JmxRulesEngine</code> as a managed rule:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">JmxRulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">aNewJmxRulesEngine</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+<p>Once you defined your rule as a Jmx compliant object, you can register it in a <code class="highlighter-rouge">JmxRulesEngine</code> as a managed rule:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">JmxRulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">aNewJmxRulesEngine</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
 <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerJmxRule</span><span class="o">(</span><span class="n">myJmxCompliantRule</span><span class="o">);</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>This will register your rule as a JMX managed bean with the following object name:</p>
 
-<p><code>org.easyrules.core.jmx:type=YourRuleClassName,name=YourRuleName</code></p>
+<p><code class="highlighter-rouge">org.easyrules.core.jmx:type=YourRuleClassName,name=YourRuleName</code></p>
 
 <p>An example of using dynamic rule reconfiguration at runtime is provided in the <a href="http://www.easyrules.org/tutorials/shop-tutorial.html">shop tutorial</a>.</p>
 

@@ -59,93 +59,110 @@
         <article>
           <h1>Hello World tutorial</h1>
           <p>This tutorial shows how to use Easy Rules in a very simple application.
- The goal is to ask the user if he is a friend of duke and says &#39;Hello duke&#39;s friend!&#39; only if he replies &#39;yes&#39;.</p>
+ The goal is to ask the user if he is a friend of duke and say ‘Hello duke’s friend!’ only if he replies ‘yes’.</p>
 
 <p>Based on this requirement, the rule is pretty straightforward :</p>
 
 <ul>
-<li>The condition is that the user input must be equal to &#39;yes&#39;</li>
-<li>The action is to say &#39;Hello duke&#39;s friend!&#39; to the user</li>
+  <li>The condition is that the user input must be equal to ‘yes’</li>
+  <li>The action is to say ‘Hello duke’s friend!’ to the user</li>
 </ul>
 
-<p>First, let&#39;s create a rule class:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Rule</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Hello World rule&quot;</span><span class="o">,</span>
-    <span class="n">description</span> <span class="o">=</span> <span class="s">&quot;Say Hello to duke&#39;s friends only&quot;</span><span class="o">)</span>
+<p>First, let’s create a rule class:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Rule</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Hello World rule"</span><span class="o">,</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s">"Say Hello to duke's friends only"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorldRule</span> <span class="o">{</span>
 
-    <span class="cm">/**</span>
-<span class="cm">     * The user input which represents the data</span>
-<span class="cm">     * that the rule will operate on.</span>
-<span class="cm">     */</span>
+    <span class="cm">/**
+     * The user input which represents the data
+     * that the rule will operate on.
+     */</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">input</span><span class="o">;</span>
 
     <span class="nd">@Condition</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">checkInput</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">checkInput</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">//The rule should be applied only if</span>
-        <span class="c1">//the user&#39;s response is yes (duke friend)</span>
-        <span class="k">return</span> <span class="n">input</span><span class="o">.</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">&quot;yes&quot;</span><span class="o">);</span>
+        <span class="c1">//the user's response is yes (duke friend)</span>
+        <span class="k">return</span> <span class="n">input</span><span class="o">.</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"yes"</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="nd">@Action</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayHelloToDukeFriend</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">sayHelloToDukeFriend</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="c1">//When rule conditions are satisfied,</span>
-        <span class="c1">//prints &#39;Hello duke&#39;s friend!&#39; to the console</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Hello duke&#39;s friend!&quot;</span><span class="o">);</span>
+        <span class="c1">//prints 'Hello duke's friend!' to the console</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello duke's friend!"</span><span class="o">);</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setInput</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setInput</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">input</span> <span class="o">=</span> <span class="n">input</span><span class="o">;</span>
     <span class="o">}</span>
 
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>Then, we have to register an instance of this rule in a Easy Rules engine and launch the tutorial with the following class:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
 
-        <span class="n">Scanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Scanner</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">in</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Are you a friend of duke?[yes/no]:&quot;</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">Scanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">in</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Are you a friend of duke?[yes/no]:"</span><span class="o">);</span>
         <span class="n">String</span> <span class="n">input</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">nextLine</span><span class="o">();</span>
 
-        <span class="cm">/**</span>
-<span class="cm">         * Declare the rule</span>
-<span class="cm">         */</span>
-        <span class="n">HelloWorldRule</span> <span class="n">helloWorldRule</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">HelloWorldRule</span><span class="o">();</span>
+        <span class="cm">/**
+         * Declare the rule
+         */</span>
+        <span class="n">HelloWorldRule</span> <span class="n">helloWorldRule</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HelloWorldRule</span><span class="o">();</span>
 
-        <span class="cm">/**</span>
-<span class="cm">         * Set business data to operate on</span>
-<span class="cm">         */</span>
+        <span class="cm">/**
+         * Set business data to operate on
+         */</span>
         <span class="n">helloWorldRule</span><span class="o">.</span><span class="na">setInput</span><span class="o">(</span><span class="n">input</span><span class="o">.</span><span class="na">trim</span><span class="o">());</span>
 
-        <span class="cm">/**</span>
-<span class="cm">         * Create a rules engine and register the business rule</span>
-<span class="cm">         */</span>
+        <span class="cm">/**
+         * Create a rules engine and register the business rule
+         */</span>
         <span class="n">RulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="n">aNewRulesEngine</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
-
+        
         <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="n">helloWorldRule</span><span class="o">);</span>
 
-        <span class="cm">/**</span>
-<span class="cm">         * Fire rules</span>
-<span class="cm">         */</span>
+        <span class="cm">/**
+         * Fire rules
+         */</span>
         <span class="n">rulesEngine</span><span class="o">.</span><span class="na">fireRules</span><span class="o">();</span>
 
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>To run this tutorial, you can follow these instructions from the root directory of Easy Rules :</p>
+</code></pre>
+</div>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn install
-<span class="nv">$ </span><span class="nb">cd </span>easyrules-samples
-<span class="nv">$ </span>mvn <span class="nb">exec</span>:java -P runHelloWorldTutorial</code></pre></figure>
+<p>To run this tutorial, you can follow these instructions:</p>
 
-<p>You would get the following output:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">Are you a friend of duke? [yes/no]:
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>git clone https://github.com/EasyRules/easyrules-tutorials.git
+<span class="gp">$ </span><span class="nb">cd </span>easyrules-tutorials
+<span class="gp">$ </span>mvn install <span class="nb">exec</span>:java -P runHelloWorldTutorial</code></pre></figure>
+
+<p>You should get the following output:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Are you a friend of duke? [yes/no]:
 yes
-INFO: Rule &#39;Hello World rule&#39; triggered.
-Hello duke&#39;s friend!
-INFO: Rule &#39;Hello World rule&#39; performed successfully.
-</code></pre></div>
+INFO: Engine name: engine
+INFO: Rule priority threshold: 2,147,483,647
+INFO: Skip on first applied rule: false
+INFO: Skip on first failed rule: false
+INFO: Registered rules:
+INFO: Rule { name = 'Hello World rule', description = 'Say Hello to duke's friends only', priority = '2147483646'}
+INFO: Rules evaluation started
+INFO: Rule 'Hello World rule' triggered
+Hello duke's friend!
+INFO: Rule 'Hello World rule' performed successfully
+</code></pre>
+</div>
+
+
           <div class="section-nav">
   <div class="left align-right">
     

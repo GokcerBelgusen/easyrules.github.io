@@ -63,6 +63,38 @@
 
     <div class="release">
         <span class="post-category">
+            <span class="label">Version 2.3.0</span>
+        </span>
+        <div class="post-meta">
+            <span class="post-date">2016-08-24</span>
+        </div>
+        <div class="post-content">
+            <h5>New features:</h5>
+            <ul>
+                <li>Add possibility to create composite rules from annotated rules
+                    (<a href="https://github.com/EasyRules/easyrules/issues/41" target="_blank">Issue #41</a>).</li>
+                <li>New method <code>checkRules()</code> in the <code>RulesEngine</code> API to check rules without firing them
+                    (<a href="https://github.com/EasyRules/easyrules/issues/40" target="_blank">Issue #40</a>).</li>
+                <li>New method <code>getListeners()</code> in the <code>RulesEngine</code> API to get registered listeners
+                    (<a href="https://github.com/EasyRules/easyrules/issues/39" target="_blank">Issue #39</a>).</li>
+                <li>New method <code>beforeEvaluate()</code> in the <code>RuleListener</code> API to add custom behavior before evaluating a rule
+                    (<a href="https://github.com/EasyRules/easyrules/issues/34" target="_blank">Issue #34</a>).</li>
+            </ul>
+            <h5>Fixed bugs:</h5>
+            <ul>
+                <li>Unable to use Easy Rules in android due to JMX (<a href="https://github.com/EasyRules/easyrules/issues/32" target="_blank">Issue #32</a>)</li>
+                <li>Unable to set rules engine name in spring factory bean (<a href="https://github.com/EasyRules/easyrules/issues/38" target="_blank">Issue #38</a>)</li>
+            </ul>
+            <h5>Improvements:</h5>
+            <ul>
+                <li>Improve JUL log record format (<a href="https://github.com/EasyRules/easyrules/issues/46" target="_blank">Issue #46</a>)</li>
+            </ul>
+            <p>Note that this version has also deprecated the ability to manage rules at runtime via JMX (<a href="https://github.com/EasyRules/easyrules/issues/47" target="_blank">Issue #47</a>).</p>
+        </div>
+    </div>
+
+    <div class="release">
+        <span class="post-category">
             <span class="label">Version 2.2.0</span>
         </span>
         <div class="post-meta">

@@ -58,77 +58,124 @@
       <div class="unit four-fifths">
         <article>
           <h1>Spring tutorial</h1>
-          <p>In this tutorial, you will learn how to use Easy Rules embedded in a <a href="http://www.spring.io" target="_blank">Spring</a> container.</p>
+          <p>In this tutorial, you will learn how to embed an Easy Rules engine in a <a href="http://www.spring.io" target="_blank">Spring</a> container.</p>
 
-<p>You will create a dummy rule and a rules engine and configure them as Spring beans. So let&#39;s get started.</p>
+<p>You will create some rules and a rules engine and configure them as Spring beans. So let’s get started.</p>
 
 <p>First you need to add the following dependency to your <strong><em>pom.xml</em></strong>:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.easyrules<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>easyrules-spring<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.2.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.3.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre></div>
-<p>Then, let&#39;s create the dummy rule:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Rule</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;dummy rule&quot;</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>Then, let’s create a first rule:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Rule</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"dummy rule"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DummyRule</span> <span class="o">{</span>
 
     <span class="nd">@Condition</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">when</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">when</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Action</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">then</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Hey, I&#39;m managed by Spring&quot;</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">then</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hey, I'm managed by Spring"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>Now, we we can use the <code>RulesEngineFactoryBean</code> to configure a rules engine and register the dummy rule:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
-       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-       <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/beans</span>
-<span class="s">       http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<p>We will create another rule to show the usage of <code class="highlighter-rouge">@SpringRule</code> annotation:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@SpringRule</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AnotherDummyRule</span> <span class="o">{</span>
+
+    <span class="nd">@Condition</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">when</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Action</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">then</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hey, I'm annotated with @SpringRule"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">@SpringRule</code> turns a POJO into a prototype-scoped Spring bean and an Easy Rules rule.</p>
+
+<p>Now, we can use the <code class="highlighter-rouge">RulesEngineFactoryBean</code> to configure a rules engine and register rules:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+       <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+       <span class="na">xmlns:context=</span><span class="s">"http://www.springframework.org/schema/context"</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+        <span class="err">http://www.springframework.org/schema/context</span>
+        <span class="err">http://www.springframework.org/schema/context/spring-context.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;context:annotation-config/&gt;</span>
+    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">"org.easyrules.samples.spring"</span><span class="nt">/&gt;</span>
 
     <span class="c">&lt;!-- configure rule  --&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;rule&quot;</span> <span class="na">class=</span><span class="s">&quot;org.easyrules.samples.spring.DummyRule&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"rule"</span> <span class="na">class=</span><span class="s">"org.easyrules.samples.spring.DummyRule"</span> <span class="na">scope=</span><span class="s">"prototype"</span><span class="nt">/&gt;</span>
 
     <span class="c">&lt;!-- configure rules engine --&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;rulesEngine&quot;</span> 
-          <span class="na">class=</span><span class="s">&quot;org.easyrules.spring.RulesEngineFactoryBean&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;rules&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"rulesEngine"</span> <span class="na">class=</span><span class="s">"org.easyrules.spring.RulesEngineFactoryBean"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"rules"</span><span class="nt">&gt;</span>
             <span class="nt">&lt;list&gt;</span>
-                <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&quot;rule&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">"rule"</span><span class="nt">/&gt;</span>
             <span class="nt">&lt;/list&gt;</span>
         <span class="nt">&lt;/property&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
 
 <span class="nt">&lt;/beans&gt;</span>
-</code></pre></div>
-<p>Finally, we can get the rules engine from the Spring context and fire rules:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
+</code></pre>
+</div>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&quot;org/easyrules/samples/spring/application-context.xml&quot;</span><span class="o">);</span>
-        <span class="n">RulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="o">(</span><span class="n">RulesEngine</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;rulesEngine&quot;</span><span class="o">);</span>
+<p>Finally, we can get the rules engine from the Spring context and fire rules:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Launcher</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"org/easyrules/samples/spring/application-context.xml"</span><span class="o">);</span>
+        <span class="n">RulesEngine</span> <span class="n">rulesEngine</span> <span class="o">=</span> <span class="o">(</span><span class="n">RulesEngine</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"rulesEngine"</span><span class="o">);</span>
+        <span class="n">AnotherDummyRule</span> <span class="n">rule</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">AnotherDummyRule</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">rulesEngine</span><span class="o">.</span><span class="na">registerRule</span><span class="o">(</span><span class="n">rule</span><span class="o">);</span>
 
         <span class="n">rulesEngine</span><span class="o">.</span><span class="na">fireRules</span><span class="o">();</span>
     <span class="o">}</span>
 
 <span class="o">}</span>
-</code></pre></div>
-<p>That&#39;s all. To run the tutorial, you can follow these instructions from the root directory of Easy Rules:</p>
+</code></pre>
+</div>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn install
-<span class="nv">$ </span><span class="nb">cd </span>easyrules-samples
-<span class="nv">$ </span>mvn <span class="nb">exec</span>:java -P runSpringTutorial</code></pre></figure>
+<p>That’s all. To run the tutorial, please follow these instructions:</p>
 
-<p>You would get the following output:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">INFO: Rule &#39;dummy rule&#39; triggered.
-Hey, I&#39;m managed by Spring
-INFO: Rule &#39;dummy rule&#39; performed successfully.
-</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>git clone https://github.com/EasyRules/easyrules-tutorials.git
+<span class="gp">$ </span><span class="nb">cd </span>easyrules-tutorials
+<span class="gp">$ </span>mvn install <span class="nb">exec</span>:java -P runSpringTutorial</code></pre></figure>
+
+<p>You should see the following output:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>INFO: Rules evaluation started
+INFO: Rule 'AnotherDummyRule' triggered
+Hey, I'm annotated with @SpringRule
+INFO: Rule 'AnotherDummyRule' performed successfully
+INFO: Rule 'dummy rule' triggered
+Hey, I'm managed by Spring
+INFO: Rule 'dummy rule' performed successfully
+</code></pre>
+</div>
+
+
           <div class="section-nav">
   <div class="left align-right">
     
